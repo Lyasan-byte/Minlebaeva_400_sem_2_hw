@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ошибка</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h1>Произошла ошибка</h1>
+
+<#if error??>
+<div style="color: red;">
+    <p>${error}</p>
+</div>
+<#else>
+<div style="color: red;">
+    <p>Неизвестная ошибка</p>
+</div>
+</#if>
+
+<br/>
+<a href="/users">Вернуться к списку пользователей</a>
+</body>
+</html>

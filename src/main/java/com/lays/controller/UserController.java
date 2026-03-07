@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -24,8 +23,13 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String getUser(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.findUserById(id));
-        return "user-detail";
+        try {
+            model.addAttribute("user", userService.findUserById(id));
+            return "user-detail";
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            return "error";
+        }
     }
 
     @GetMapping("/create")
@@ -35,14 +39,50 @@ public class UserController {
     }
 
     @PostMapping
-    public String createUser(@ModelAttribute UserDTO userDTO) {
-        userService.createUser(userDTO.getUsername());
-        return "redirect:/users";
+    public String createUser(@ModelAttribute("user") UserDTO userDTO, Model model) {
+        try {
+            userService.createUser(userDTO.getUsername());
+            return "redirect:/users";
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("user", userDTO);
+            return "user-create";
+        }
+    }
+
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
+        try {
+            model.addAttribute("user", userService.findUserById(id));
+            return "user-edit";
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            return "error";
+        }
+    }
+
+    @PostMapping("/{id}/edit")
+    public String updateUser(@PathVariable("id") Long id,
+                             @ModelAttribute("user") UserDTO userDTO,
+                             Model model) {
+        try {
+            userService.updateUser(id, userDTO.getUsername());
+            return "redirect:/users";
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("user", userDTO);
+            return "user-edit";
+        }
     }
 
     @PostMapping("/{id}/delete")
-    public String deleteUser(@PathVariable("id") Long id) {
-        userService.deleteUser(id);
-        return "redirect:/users";
+    public String deleteUser(@PathVariable("id") Long id, Model model) {
+        try {
+            userService.deleteUser(id);
+            return "redirect:/users";
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            return "error";
+        }
     }
 }

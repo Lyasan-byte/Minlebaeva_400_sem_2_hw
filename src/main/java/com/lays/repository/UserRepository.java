@@ -1,40 +1,21 @@
 package com.lays.repository;
 
+
 import com.lays.model.User;
-import org.hibernate.SessionFactory;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
-public class UserRepository {
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUsername(String username);
 
-    private final SessionFactory sessionFactory;
+    @Query(value = "select u from User u where u.username = :username")
+    Optional<User> getByUsername(String username);
 
-    public UserRepository(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    public List<User> findAll() {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from User", User.class)
-                .list();
-    }
-
-    public User findById(Long id) {
-        return sessionFactory.getCurrentSession()
-                .get(User.class, id);
-    }
-
-    public User save(User user) {
-        sessionFactory.getCurrentSession().saveOrUpdate(user);
-        return user;
-    }
-
-    public void delete(Long id) {
-        User user = findById(id);
-        if (user != null) {
-            sessionFactory.getCurrentSession().delete(user);
-        }
-    }
+    @Query(value = "select * from users where username = ?1", nativeQuery = true)
+    Optional<User> getByUsernameNative(String username);
 }

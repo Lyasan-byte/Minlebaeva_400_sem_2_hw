@@ -29,12 +29,17 @@ public class UserService {
     }
 
     public UserDTO findUserById(Long id) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         return userMapper.toDTO(user);
     }
 
     @Transactional
     public UserDTO createUser(String username) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new RuntimeException("User with username " + username + " already exists");
+        }
+
         User user = new User();
         user.setUsername(username);
         User saved = userRepository.save(user);
@@ -42,7 +47,31 @@ public class UserService {
     }
 
     @Transactional
+    public UserDTO updateUser(Long id, String username) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        if (!user.getUsername().equals(username) &&
+                userRepository.findByUsername(username).isPresent()) {
+            throw new RuntimeException("User with username " + username + " already exists");
+        }
+
+        user.setUsername(username);
+        User updated = userRepository.save(user);
+        return userMapper.toDTO(updated);
+    }
+
+    @Transactional
     public void deleteUser(Long id) {
-        userRepository.delete(id);
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+        userRepository.deleteById(id);
+    }
+
+    public UserDTO findByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+        return userMapper.toDTO(user);
     }
 }

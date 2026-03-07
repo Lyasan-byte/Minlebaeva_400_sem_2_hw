@@ -6,11 +6,14 @@ import org.hibernate.SessionFactory;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;
 import org.springframework.orm.jpa.vendor.Database;
@@ -24,6 +27,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @PropertySource("classpath:persistence.properties")
+@EnableJpaRepositories("com.lays.repository")
 public class PersistenceConfig implements EnvironmentAware {
 
     private Environment environment;
@@ -44,14 +48,20 @@ public class PersistenceConfig implements EnvironmentAware {
     }
 
     @Bean
-    public EntityManagerFactory entityManagerFactory(DataSource dataSource, HibernateJpaVendorAdapter jpaVendorAdapter) {
-
+    public EntityManagerFactory entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+        entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter());
         entityManagerFactoryBean.setPackagesToScan("com.lays.model");
-        entityManagerFactoryBean.setDataSource(dataSource);
+        entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.afterPropertiesSet();
         return entityManagerFactoryBean.getObject();
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory());
+        return transactionManager;
     }
 
     @Bean
@@ -73,19 +83,21 @@ public class PersistenceConfig implements EnvironmentAware {
         return vendorAdapter;
     }
 
-    @Bean
-    public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource);
-        sessionFactory.setPackagesToScan("com.lays.model");
-        Properties hibernateProperties = new Properties();
-        hibernateProperties.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
-        sessionFactory.setHibernateProperties(hibernateProperties);
-        return sessionFactory;
-    }
+//    @Bean
+//    public LocalSessionFactoryBean sessionFactory() {
+//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+//        sessionFactory.setDataSource(dataSource());
+//        sessionFactory.setPackagesToScan("com.lays.model");
+//        Properties hibernateProperties = new Properties();
+//        hibernateProperties.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
+//        sessionFactory.setHibernateProperties(hibernateProperties);
+//        return sessionFactory;
+//    }
 
-    @Bean
-    public PlatformTransactionManager transactionManager(LocalSessionFactoryBean sessionFactory) {
-        return new HibernateTransactionManager(sessionFactory.getObject());
-    }
+//    @Bean
+//    public PlatformTransactionManager hibernateTransactionManager(LocalSessionFactoryBean sessionFactory) {
+//        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+//        transactionManager.setSessionFactory(sessionFactory().getObject());
+//        return new HibernateTransactionManager(sessionFactory.getObject());
+//    }
 }
