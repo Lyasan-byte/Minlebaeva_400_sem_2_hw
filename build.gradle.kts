@@ -13,6 +13,7 @@ val postgresVersion: String by project
 val freemarkerVersion: String by project
 val hikariVersion: String by project
 val springDataVersion: String by project
+val springSecurityVersion: String by project
 
 repositories {
     mavenCentral()
@@ -24,6 +25,10 @@ dependencies {
     implementation("org.springframework:spring-orm:$springVersion")
     implementation("org.springframework:spring-context-support:$springVersion")
     implementation("org.springframework.data:spring-data-jpa:$springDataVersion")
+    implementation("org.springframework.security:spring-security-core:$springSecurityVersion")
+    implementation("org.springframework.security:spring-security-web:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-config:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-taglibs:${springSecurityVersion}")
     implementation("jakarta.servlet:jakarta.servlet-api:$jakartaVersion")
     implementation("org.hibernate.orm:hibernate-core:$hibernateVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")

@@ -14,6 +14,7 @@
 
 <#if user??>
     <form action="/users/${user.id}/edit" method="post">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <div>
             <label for="username">Username:</label>
             <input type="text"

@@ -9,6 +9,7 @@
 
 <a href="/users/create">Добавить пользователя</a>
 <br><br>
+
 <#if error??>
     <div style="color: red;">
         <p>${error}</p>
@@ -34,6 +35,7 @@
                 <a href="/users/${user.id}/edit">Редактировать</a>
                 |
                 <form action="/users/${user.id}/delete" method="post" style="display:inline;">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить этого пользователя?')">
                         Удалить
                     </button>
