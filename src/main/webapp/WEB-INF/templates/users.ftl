@@ -7,8 +7,16 @@
 <body>
 <h1>Список пользователей</h1>
 
-<a href="/users/create">Добавить пользователя</a>
-<br><br>
+<div style="margin-bottom: 20px;">
+    <a href="/notes">Мои заметки</a>
+    |
+    <a href="/notes/public">Публичные заметки</a>
+</div>
+
+<form action="/logout" method="post" style="margin-bottom: 20px;">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    <button type="submit">Выйти</button>
+</form>
 
 <#if error??>
     <div style="color: red;">

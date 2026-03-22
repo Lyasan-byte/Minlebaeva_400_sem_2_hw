@@ -39,16 +39,16 @@ public class SecurityConfig {
                 // Настройка авторизации
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "/register", "/login", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/users/**").authenticated()  // Доступ к пользователям только после входа
-                        .requestMatchers("/hello").hasRole("USER")
-                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/notes/public").permitAll()
+                        .requestMatchers("/notes/**").hasRole("USER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 // Настройка формы входа
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/users", true)
+                        .defaultSuccessUrl("/notes", true)
                         .failureUrl("/login?error")
                         .permitAll()
                 )

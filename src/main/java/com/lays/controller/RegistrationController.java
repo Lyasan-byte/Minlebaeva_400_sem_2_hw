@@ -27,11 +27,10 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String registerUser(
-            @RequestParam("username") String username,
-            @RequestParam("password") String password,
-            @RequestParam("confirmPassword") String confirmPassword,
-            Model model) {
+    public String registerUser(@RequestParam("username") String username,
+                               @RequestParam("password") String password,
+                               @RequestParam("confirmPassword") String confirmPassword,
+                               Model model) {
 
         String error = registrationService.register(username, password, confirmPassword);
 

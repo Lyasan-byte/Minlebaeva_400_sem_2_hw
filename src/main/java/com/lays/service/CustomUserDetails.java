@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails {
-
     private final Long id;
     private final String username;
     private final String password;
@@ -22,6 +21,10 @@ public class CustomUserDetails implements UserDetails {
         this.authorities = roleNames.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override
@@ -57,9 +60,5 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public Long getId() {
-        return id;
     }
 }

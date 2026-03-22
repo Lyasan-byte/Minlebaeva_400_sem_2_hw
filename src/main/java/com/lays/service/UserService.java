@@ -1,6 +1,5 @@
 package com.lays.service;
 
-import com.lays.dto.RegistrationDTO;
 import com.lays.dto.UserDTO;
 import com.lays.mapper.UserMapper;
 import com.lays.model.Role;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 public class UserService {
-
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
@@ -43,50 +41,6 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         return userMapper.toDTO(user);
-    }
-
-    @Transactional
-    public UserDTO createUser(String username) {
-        if (userRepository.findByUsername(username).isPresent()) {
-            throw new RuntimeException("User with username " + username + " already exists");
-        }
-
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode("temp123"));
-
-        Role userRole = roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("Role USER not found"));
-        user.setRoles(List.of(userRole));
-
-        User saved = userRepository.save(user);
-        return userMapper.toDTO(saved);
-    }
-
-    @Transactional
-    public UserDTO registerUser(RegistrationDTO registrationDTO) {
-        if (userRepository.findByUsername(registrationDTO.getUsername()).isPresent()) {
-            throw new RuntimeException("Пользователь с таким именем уже существует");
-        }
-
-        if (!registrationDTO.getPassword().equals(registrationDTO.getConfirmPassword())) {
-            throw new RuntimeException("Пароли не совпадают");
-        }
-
-        if (registrationDTO.getPassword().length() < 4) {
-            throw new RuntimeException("Пароль должен содержать минимум 4 символа");
-        }
-
-        User user = new User();
-        user.setUsername(registrationDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
-
-        Role userRole = roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("Роль USER не найдена в системе"));
-        user.setRoles(List.of(userRole));
-
-        User saved = userRepository.save(user);
-        return userMapper.toDTO(saved);
     }
 
     @Transactional

@@ -12,7 +12,6 @@ import java.util.List;
 
 @Service
 public class RegistrationService {
-
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -42,7 +41,6 @@ public class RegistrationService {
         try {
             Role userRole = roleRepository.findByName("ROLE_USER")
                     .orElseThrow(() -> new RuntimeException("Роль USER не найдена в БД"));
-
             User user = new User();
             user.setUsername(username);
             user.setPassword(passwordEncoder.encode(password));

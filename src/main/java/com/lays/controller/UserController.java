@@ -32,24 +32,6 @@ public class UserController {
         }
     }
 
-    @GetMapping("/create")
-    public String showCreateForm(Model model) {
-        model.addAttribute("user", new UserDTO());
-        return "user-create";
-    }
-
-    @PostMapping
-    public String createUser(@ModelAttribute("user") UserDTO userDTO, Model model) {
-        try {
-            userService.createUser(userDTO.getUsername());
-            return "redirect:/users";
-        } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("user", userDTO);
-            return "user-create";
-        }
-    }
-
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
         try {
