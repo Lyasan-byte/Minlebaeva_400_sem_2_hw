@@ -7,11 +7,7 @@
 <body>
 <h1>Публичные заметки</h1>
 
-<div style="margin-bottom: 20px;">
-    <a href="/login">Войти</a>
-    |
-    <a href="/register">Регистрация</a>
-</div>
+<br>
 
 <form method="get" action="/notes/public" style="margin-bottom: 20px;">
     <input type="text" name="keyword" value="<#if keyword??>${keyword}</#if>" placeholder="Поиск по заголовку">

@@ -15,11 +15,15 @@
 <h2>Вход в систему</h2>
 
 <#if RequestParameters.registered??>
-    <div class="success">Регистрация успешна! Войдите в систему.</div>
+    <div class="success">Регистрация успешна! Проверьте почту и подтвердите аккаунт.</div>
+</#if>
+
+<#if message??>
+    <div class="success">${message}</div>
 </#if>
 
 <#if RequestParameters.error??>
-    <div class="error">Неверное имя пользователя или пароль</div>
+    <div class="error">Неверные данные или аккаунт ещё не подтверждён</div>
 </#if>
 
 <form method="post" action="/login">

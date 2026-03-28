@@ -2,9 +2,9 @@ package com.lays.service;
 
 import com.lays.model.User;
 import com.lays.repository.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,15 +25,19 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден: " + username));
 
-        List<String> roleNames = user.getRoles().stream()
-                .map(role -> role.getName())
+        List<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> role.getName().startsWith("ROLE_")
+                        ? role.getName()
+                        : "ROLE_" + role.getName())
+                .<GrantedAuthority>map(SimpleGrantedAuthority::new)
                 .toList();
 
         return new CustomUserDetails(
                 user.getId(),
                 user.getUsername(),
                 user.getPassword(),
-                roleNames
+                user.isVerified(),
+                authorities
         );
     }
 }

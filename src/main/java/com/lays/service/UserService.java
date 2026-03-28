@@ -4,13 +4,19 @@ import com.lays.dto.UserDTO;
 import com.lays.mapper.UserMapper;
 import com.lays.model.Role;
 import com.lays.model.User;
+import com.lays.properties.MailProperties;
 import com.lays.repository.RoleRepository;
 import com.lays.repository.UserRepository;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service

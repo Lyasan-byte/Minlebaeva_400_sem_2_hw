@@ -2,6 +2,7 @@ package com.lays.controller;
 
 import com.lays.dto.AdminNoteDTO;
 import com.lays.service.NoteService;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

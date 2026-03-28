@@ -16,10 +16,10 @@ public class Note {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
+    @Column(name = "createdat", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column(name = "ispublic", nullable = false)
     private boolean isPublic;
 
     @ManyToOne
