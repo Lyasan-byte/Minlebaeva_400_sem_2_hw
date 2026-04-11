@@ -1,0 +1,106 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="lajsan (generated)" id="1775841179686-1">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" startWith="28" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastname" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="login" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="photo_url" type="VARCHAR(500)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lajsan (generated)" id="1775841179686-2">
+        <createTable tableName="games">
+            <column autoIncrement="true" name="id" startWith="4" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="games_pkey"/>
+            </column>
+            <column name="title" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="genre" type="VARCHAR(50)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lajsan (generated)" id="1775841179686-3">
+        <createTable tableName="tournaments">
+            <column autoIncrement="true" name="id" startWith="22" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tournaments_pkey"/>
+            </column>
+            <column name="title" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="start_date" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="organizer_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lajsan (generated)" id="1775841179686-4">
+        <createTable tableName="tournament_scores">
+            <column autoIncrement="true" name="id" startWith="28" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tournament_scores_pkey"/>
+            </column>
+            <column name="tournament_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="score" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lajsan (generated)" id="1775841179686-5">
+        <addUniqueConstraint columnNames="login" constraintName="users_login_key" tableName="users"/>
+    </changeSet>
+    <changeSet author="lajsan (generated)" id="1775841179686-6">
+        <addUniqueConstraint columnNames="tournament_id, user_id" constraintName="tournament_scores_tournament_id_user_id_key" tableName="tournament_scores"/>
+    </changeSet>
+    <changeSet author="lajsan (generated)" id="1775841179686-7">
+        <createTable tableName="tournament_participants">
+            <column name="tournament_id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tournament_participants_pkey"/>
+            </column>
+            <column name="user_id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tournament_participants_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lajsan (generated)" id="1775841179686-8">
+        <addForeignKeyConstraint baseColumnNames="tournament_id" baseTableName="tournament_participants" constraintName="tournament_participants_tournament_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tournaments" validate="true"/>
+    </changeSet>
+    <changeSet author="lajsan (generated)" id="1775841179686-9">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="tournament_participants" constraintName="tournament_participants_user_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="lajsan (generated)" id="1775841179686-10">
+        <addForeignKeyConstraint baseColumnNames="tournament_id" baseTableName="tournament_scores" constraintName="tournament_scores_tournament_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tournaments" validate="true"/>
+    </changeSet>
+    <changeSet author="lajsan (generated)" id="1775841179686-11">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="tournament_scores" constraintName="tournament_scores_user_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="lajsan (generated)" id="1775841179686-12">
+        <addForeignKeyConstraint baseColumnNames="game_id" baseTableName="tournaments" constraintName="tournaments_game_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="games" validate="true"/>
+    </changeSet>
+    <changeSet author="lajsan (generated)" id="1775841179686-13">
+        <addForeignKeyConstraint baseColumnNames="organizer_id" baseTableName="tournaments" constraintName="tournaments_organizer_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

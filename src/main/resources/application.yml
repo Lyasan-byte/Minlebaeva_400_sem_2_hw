@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/orisSpring
+    url: jdbc:postgresql://localhost:5432/testLiquibase
     username: postgres
     password: 1234
     driver-class-name: org.postgresql.Driver
@@ -15,7 +15,8 @@ spring:
     show-sql: true
 
   liquibase:
-    enabled: false
+    enabled: true
+    change-log: classpath:/db/changelog/db-changelog.xml
 
   freemarker:
     enabled: true
