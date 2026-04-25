@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/testLiquibase
+    url: jdbc:postgresql://localhost:5432/orisSpring
     username: postgres
     password: 1234
     driver-class-name: org.postgresql.Driver

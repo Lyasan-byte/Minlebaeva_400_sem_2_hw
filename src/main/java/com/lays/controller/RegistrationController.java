@@ -1,5 +1,6 @@
 package com.lays.controller;
 
+import com.lays.aop.Loggable;
 import com.lays.service.RegistrationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
@@ -16,11 +17,13 @@ public class RegistrationController {
         this.registrationService = registrationService;
     }
 
+    @Loggable
     @GetMapping("/register")
     public String showRegisterForm() {
         return "register";
     }
 
+    @Loggable
     @GetMapping("/login")
     public String showLoginForm() {
         return "login";

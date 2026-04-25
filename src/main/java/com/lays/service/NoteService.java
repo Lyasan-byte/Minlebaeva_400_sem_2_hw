@@ -1,5 +1,7 @@
 package com.lays.service;
 
+import com.lays.aop.Benchmark;
+import com.lays.aop.TrackExecutionMetrics;
 import com.lays.dto.AdminNoteDTO;
 import com.lays.dto.NoteDTO;
 import com.lays.mapper.NoteMapper;
@@ -29,25 +31,35 @@ public class NoteService {
         this.noteMapper = noteMapper;
     }
 
+    @Benchmark
+    @TrackExecutionMetrics
     public List<Note> getMyNotes(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден: " + username));
         return noteRepository.findByAuthor(user);
     }
 
+    @Benchmark
+    @TrackExecutionMetrics
     public List<Note> getPublicNotes() {
         return noteRepository.findByIsPublicTrue();
     }
 
+    @Benchmark
+    @TrackExecutionMetrics
     public List<Note> searchNotesByTitle(String keyword) {
         return noteRepository.findByTitleContaining(keyword);
     }
 
+    @Benchmark
+    @TrackExecutionMetrics
     public NoteDTO getOwnedNoteForEdit(Long id, String username) {
         Note note = getOwnedNote(id, username);
         return noteMapper.toDTO(note);
     }
 
+    @Benchmark
+    @TrackExecutionMetrics
     public Note getOwnedNote(Long id, String username) {
         Note note = noteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Заметка не найдена"));
@@ -60,6 +72,8 @@ public class NoteService {
     }
 
     @Transactional
+    @Benchmark
+    @TrackExecutionMetrics
     public void createNote(NoteDTO noteDTO, String username) {
         if (noteDTO.getTitle() == null || noteDTO.getTitle().isBlank()) {
             throw new RuntimeException("Заголовок не должен быть пустым");
@@ -79,6 +93,8 @@ public class NoteService {
     }
 
     @Transactional
+    @Benchmark
+    @TrackExecutionMetrics
     public void updateNote(Long id, NoteDTO noteDTO, String username) {
         if (noteDTO.getTitle() == null || noteDTO.getTitle().isBlank()) {
             throw new RuntimeException("Заголовок не должен быть пустым");
@@ -93,11 +109,15 @@ public class NoteService {
     }
 
     @Transactional
+    @Benchmark
+    @TrackExecutionMetrics
     public void deleteNote(Long id, String username) {
         Note note = getOwnedNote(id, username);
         noteRepository.delete(note);
     }
 
+    @Benchmark
+    @TrackExecutionMetrics
     public List<AdminNoteDTO> getAllNotesForAdmin() {
         return noteRepository.findAll().stream()
                 .map(note -> new AdminNoteDTO(
@@ -113,6 +133,8 @@ public class NoteService {
     }
 
     @Transactional
+    @Benchmark
+    @TrackExecutionMetrics
     public void deleteAnyNote(Long id) {
         if (!noteRepository.existsById(id)) {
             throw new RuntimeException("Заметка не найдена");
