@@ -58,12 +58,6 @@ class RegistrationServiceTest {
         when(userRepository.findByEmail(TEST_EMAIL)).thenReturn(Optional.empty());
         when(roleRepository.findByName("ROLE_USER")).thenReturn(Optional.of(userRole));
         when(passwordEncoder.encode(TEST_PASSWORD)).thenReturn("encodedPassword");
-        when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
-        when(mailProperties.getContent()).thenReturn("Welcome ${name}! Click: ${url}");
-        when(mailProperties.getFrom()).thenReturn("noreply@test.com");
-        when(mailProperties.getSender()).thenReturn("Test App");
-        when(mailProperties.getSubject()).thenReturn("Подтверждение регистрации");
-
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
 
         // When
@@ -79,12 +73,12 @@ class RegistrationServiceTest {
         assertEquals(TEST_USERNAME, savedUser.getUsername());
         assertEquals(TEST_EMAIL, savedUser.getEmail());
         assertEquals("encodedPassword", savedUser.getPassword());
-        assertFalse(savedUser.isVerified());
-        assertNotNull(savedUser.getVerificationCode());
+        assertTrue(savedUser.isVerified());
+        assertNull(savedUser.getVerificationCode());
         assertEquals(1, savedUser.getRoles().size());
         assertEquals(userRole, savedUser.getRoles().get(0));
 
-        verify(javaMailSender, times(1)).send(any(MimeMessage.class));
+        verify(javaMailSender, never()).send(any(MimeMessage.class));
     }
 
     @Test

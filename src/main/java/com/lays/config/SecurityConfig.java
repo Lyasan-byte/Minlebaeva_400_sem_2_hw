@@ -25,13 +25,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/ws/**", "/admin/**"))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "/register", "/login", "/verification",
                                 "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/notes/public").permitAll()
+                        .requestMatchers("/chat/public").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/users/**").hasRole("ADMIN")
                         .requestMatchers("/notes/**").hasRole("USER")
+                        .requestMatchers("/chat/**", "/ws/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

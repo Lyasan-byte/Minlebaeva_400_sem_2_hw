@@ -74,12 +74,11 @@ public class RegistrationService {
         user.setUsername(username.trim());
         user.setEmail(email.trim().toLowerCase());
         user.setPassword(passwordEncoder.encode(password));
-        user.setVerified(false);
-        user.setVerificationCode(UUID.randomUUID().toString());
+        user.setVerified(true);
+        user.setVerificationCode(null);
         user.setRoles(List.of(userRole));
 
         userRepository.save(user);
-        sendVerificationEmail(user, baseUrl);
 
         return null;
     }

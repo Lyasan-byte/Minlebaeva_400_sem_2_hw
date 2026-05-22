@@ -15,7 +15,7 @@
 <h2>Вход в систему</h2>
 
 <#if RequestParameters.registered??>
-    <div class="success">Регистрация успешна! Проверьте почту и подтвердите аккаунт.</div>
+    <div class="success">Регистрация успешна! Теперь можно войти.</div>
 </#if>
 
 <#if message??>

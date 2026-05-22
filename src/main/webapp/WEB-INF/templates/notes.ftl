@@ -12,6 +12,8 @@
     |
     <a href="/notes/public">Публичные заметки</a>
     |
+    <a href="/chat">Общий чат</a>
+    |
     <a href="/users">Пользователи</a>
 </div>
 

@@ -20,6 +20,7 @@ val postgresVersion: String by project
 //val hikariVersion: String by project
 //val springDataVersion: String by project
 val springSecurityVersion: String by project
+val jwtVersion: String by project
 
 repositories {
     mavenCentral()
@@ -28,6 +29,7 @@ repositories {
 dependencies {
     //implementation("org.springframework:spring-webmvc:$springVersion")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
 //    implementation("org.springframework:spring-jdbc:$springVersion")
 //    implementation("org.springframework:spring-orm:$springVersion")
 //    implementation("org.springframework:spring-context-support:$springVersion")
@@ -56,6 +58,11 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+
+
+    implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
+    implementation("io.jsonwebtoken:jjwt-impl:$jwtVersion")
+    implementation("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
 }
 
 val props = Properties()

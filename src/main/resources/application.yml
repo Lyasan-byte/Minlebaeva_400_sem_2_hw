@@ -48,3 +48,9 @@ app:
       Please verify your account by opening this link:<br><br>
       <a href="${url}">${url}</a><br><br>
       If the link does not open, copy it into your browser.
+
+jwt:
+  access:
+    access: "MGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6MTIzNDU="
+  refresh:
+    access: "MTIzNDU2Nzg5MGFiY2RlZmdoaWprbG1ub3BxcnN0dnd4eXo="
